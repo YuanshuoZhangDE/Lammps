@@ -1,0 +1,9 @@
+LAMMPS (30 Jul 2016)
+# Lammps in file of Fe
+
+echo                           screen
+  triclinic box = (0 0 0) to (28.4812 28.4812 28.4812) with tilt (0 0 0)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  2000 atoms
+ERROR: Unknown pair style (../force.cpp:190)

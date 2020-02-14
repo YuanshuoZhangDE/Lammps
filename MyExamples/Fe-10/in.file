@@ -1,0 +1,33 @@
+# Lammps in file of Fe
+
+echo                           screen
+  
+units													 metal
+boundary											 p p p
+atom_style										 atomic
+
+read_data											 Fe.data
+
+pair_style										 eam/fs
+pair_coeff										 * * Fe_mm.eam.fs Fe
+
+neighbor	                     0.3 bin
+neigh_modify									 delay 10
+
+fix														 1 all nvt temp 300 100 50
+
+#thermo												 100
+
+timestep											 0.005
+
+min_style                                            sd
+minimize											 1.0e-12 1.0e-12 10000 10000 
+dump				 									 1 all custom 100 dump_min.lammpstrj id type x y z
+
+compute             3               all pe/atom
+compute             4               all ke/atom
+compute             5               all coord/atom cutoff 3.0
+
+
+dump                  2 all custom 1 dump_run.lammpstrj id type x y z c_3 c_4 c_5
+run														 1

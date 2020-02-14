@@ -1,0 +1,55 @@
+LAMMPS (30 Jul 2016)
+# Lammps in file of Fe
+
+echo                           screen
+  triclinic box = (0 0 0) to (142.406 142.406 142.406) with tilt (0 0 0)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  250000 atoms
+Reading potential file Fe_mm.eam.fs with DATE: 2007-06-11
+WARNING: Resetting reneighboring criteria during minimization (../min.cpp:168)
+Neighbor list info ...
+  1 neighbor list requests
+  update every 1 steps, delay 0 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 5.6
+  ghost atom cutoff = 5.6
+  binsize = 2.8 -> bins = 51 51 51
+Memory usage per processor = 96.6749 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       0            0     -1030516            0     -1030516     13557.78 
+       1            0     -1030516            0     -1030516     13557.78 
+Loop time of 2.17729 on 1 procs for 1 steps with 250000 atoms
+
+98.1% CPU use with 1 MPI tasks x no OpenMP threads
+
+Minimization stats:
+  Stopping criterion = energy tolerance
+  Energy initial, next-to-last, final = 
+        -1030516.04765     -1030516.04765     -1030516.04766
+  Force two-norm initial, final = 0.0190271 0.00621086
+  Force max component initial, final = 7.58062e-05 2.64642e-05
+  Final line search alpha, max atom move = 1 2.64642e-05
+  Iterations, force evaluations = 1 2
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 1.705      | 1.705      | 1.705      |   0.0 | 78.31
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.0055878  | 0.0055878  | 0.0055878  |   0.0 |  0.26
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 0.4667     |            |       | 21.43
+
+Nlocal:    250000 ave 250000 max 250000 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    56341 ave 56341 max 56341 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    7.25e+06 ave 7.25e+06 max 7.25e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 7250000
+Ave neighs/atom = 29
+Neighbor list builds = 0
+Dangerous builds = 0
