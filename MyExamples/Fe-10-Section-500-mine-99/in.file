@@ -1,0 +1,54 @@
+#echo                    screen 
+#弛豫
+units                   metal
+boundary                p p p
+atom_style              atomic
+lattice                 bcc 2.86
+region                  box block 0 10 0 10 0 10
+create_box              1 box
+create_atoms            1 box
+
+region                  Section block INF INF INF 5 INF INF
+delete_atoms            region Section
+
+#read_data               Fe.data
+
+pair_style              eam/fs
+pair_coeff              * * Fe_mm.eam.fs Fe 
+run                     0
+variable                E equal pe #定义变量E为系统总势能
+variable                N equal atoms #定义变量N为系统总原子数
+
+timestep                0.005
+
+print "The number of atoms and system energy now are $N and $E"
+
+
+
+min_style               sd
+
+thermo_style            custom step pe ke
+thermo                  1
+
+compute                 1 all pe/atom
+compute                 2 all ke/atom
+compute                 3 all coord/atom cutoff 3.0
+dump                    1 all custom 10 dump_min.lammpstrj id x y z c_1 c_2 c_3
+
+minimize                1.0e-99 1.0e-99 1000000 1000000
+print "The number of atoms and system energy now are $N, $E"
+
+#run                     100000
+
+
+#fix                     1 all nve                     
+
+#compute                 1 all pe/atom
+#compute                 2 all ke/atom
+#compute                 3 all coord/atom cutoff 3.0
+
+#dump                    1 all custom 1 dump.lammpstrj id x y z c_1 c_2 c_3
+
+
+
+#run                     1000
