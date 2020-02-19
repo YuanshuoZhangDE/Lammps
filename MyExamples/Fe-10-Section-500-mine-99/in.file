@@ -3,12 +3,12 @@
 units                   metal
 boundary                p s p
 atom_style              atomic
-lattice                 bcc 2.86
-region                  box block 0 10 0 10 0 10
+lattice                 bcc 2.8552
+region                  box block 0 10 0 10 0 10 units lattice
 create_box              1 box
 create_atoms            1 box
 
-region                  Section block INF INF INF 5 INF INF
+region                  Section block INF INF 5 INF INF INF units lattice
 delete_atoms            region Section
 
 #read_data               Fe.data
@@ -37,16 +37,16 @@ dump                    1 all custom 1000 dump_min.lammpstrj id x y z c_1 c_2 c_
 
 minimize                1.0e-99 1.0e-99 1000000 1000000
 print "The number of atoms and system energy now are $N, $E"
-run                     10000
+
+velocity all create 273.15 4928459 dist gaussian
+fix                     1 all nvt temp 273.15 273.15 0.5                    
+
+#compute                 4 all pe/atom
+#compute                 5 all ke/atom
+#compute                 6 all coord/atom cutoff 3.0
 
 
-fix                     1 all nvt temp 0 0 1                    
-
-compute                 4 all pe/atom
-compute                 5 all ke/atom
-compute                 6 all coord/atom cutoff 3.0
-
-dump                    2 all custom 1 dump.lammpstrj id x y z c_4 c_5 c_6
+dump                    2 all custom 100 dump.lammpstrj id x y z c_1 c_2 c_3
 
 
 
