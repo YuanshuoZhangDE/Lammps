@@ -1,7 +1,7 @@
 #echo                    screen 
 #弛豫
 units                   metal
-boundary                p p p
+boundary                p s p
 atom_style              atomic
 lattice                 bcc 2.86
 region                  box block 0 10 0 10 0 10
@@ -28,7 +28,7 @@ print "The number of atoms and system energy now are $N and $E"
 min_style               sd
 
 thermo_style            custom step pe ke
-thermo                  1
+thermo                  1000
 
 compute                 1 all pe/atom
 compute                 2 all ke/atom
@@ -37,18 +37,17 @@ dump                    1 all custom 1000 dump_min.lammpstrj id x y z c_1 c_2 c_
 
 minimize                1.0e-99 1.0e-99 1000000 1000000
 print "The number of atoms and system energy now are $N, $E"
-dump                    2 all custom 1000 dump.lammpstrj id x y z c_1 c_2 c_3
+run                     10000
+
+
+fix                     1 all nvt temp 0 0 1                    
+
+compute                 4 all pe/atom
+compute                 5 all ke/atom
+compute                 6 all coord/atom cutoff 3.0
+
+dump                    2 all custom 1 dump.lammpstrj id x y z c_4 c_5 c_6
+
+
+
 run                     100000
-
-
-#fix                     1 all nve                     
-
-#compute                 1 all pe/atom
-#compute                 2 all ke/atom
-#compute                 3 all coord/atom cutoff 3.0
-
-#dump                    1 all custom 1 dump.lammpstrj id x y z c_1 c_2 c_3
-
-
-
-#run                     1000
