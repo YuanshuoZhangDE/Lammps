@@ -4,7 +4,7 @@
  * @Author: Yuanshuo
  * @Date: 2020-02-21 17:13:46
  * @LastEditors: Yuanshuo
- * @LastEditTime: 2020-02-21 18:03:57
+ * @LastEditTime: 2020-02-21 18:41:19
  -->
 ### LAMMPS输入文件
 - in.file(in文件，必备)
@@ -52,4 +52,6 @@ timestep                0.005
 run                     100000
 ```  
 2. 由于直接在in文件中构建好了模型，所以不需要data文件。
-### 
+### 初始模型系统设置
+经常用于初始模拟系统设置的只有3个，分别为 units, boundary, atom_style, 还有一些比较不常用的（不常用的就是设置为默认值）有dimension，neighbor等
+- units命令是用来定义整个模拟系统中的单位的，	units          metal使用这条命令，则计算中一切与时间挂钩的量都是以皮秒为单位；     	units           real 使用这条命令，则计算中一切与时间挂钩的量都是以飞秒为单位；units命令使用不当会导致后期数据处理需要进行繁杂的单位换算。所以计算前要思考清楚选取何种单位体系最合适。
