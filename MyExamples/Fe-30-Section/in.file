@@ -2,11 +2,11 @@ units                   metal
 boundary                p s p
 atom_style              atomic
 lattice                 bcc 2.8552
-region                  box block 0 50 0 50 0 50 units lattice
+region                  box block 0 30 0 30 0 30 units lattice
 create_box              1 box
 create_atoms            1 box
 
-region                  Section block INF INF 25 INF INF INF units lattice
+region                  Section block INF INF 15 INF INF INF units lattice
 delete_atoms            region Section
 
 #read_data               Fe.data
@@ -26,12 +26,12 @@ print "The number of atoms and system energy now are $N and $E"
 min_style               sd
 
 thermo_style            custom step pe ke
-thermo                  1
+thermo                  100
 
 compute                 1 all pe/atom
 compute                 2 all ke/atom
 #compute                 3 all coord/atom cutoff 3.0
-dump                    1 all custom 10 dump_min.lammpstrj id x y z c_1 c_2
+dump                    1 all custom 100 dump_min.lammpstrj id x y z c_1 c_2
 
 minimize                1.0e-17 1.0e-17 1000000 1000000
 print "The number of atoms and system energy now are $N, $E"
