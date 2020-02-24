@@ -1,7 +1,7 @@
 #echo                    screen 
 #弛豫
 units                   metal
-boundary                p s p
+boundary                p p p
 atom_style              atomic
 lattice                 bcc 2.8552
 region                  box block 0 10 0 10 0 10 units lattice
@@ -41,13 +41,6 @@ print "The number of atoms and system energy now are $N, $E"
 velocity all create 273.15 4928459 dist gaussian
 fix                     1 all nvt temp 273.15 273.15 0.5                    
 
-#compute                 4 all pe/atom
-#compute                 5 all ke/atom
-#compute                 6 all coord/atom cutoff 3.0
-
-
 dump                    2 all custom 100 dump.lammpstrj id x y z c_1 c_2 c_3
-
-
 
 run                     100000
