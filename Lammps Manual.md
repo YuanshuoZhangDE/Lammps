@@ -4,8 +4,23 @@
  * @Author: Yuanshuo
  * @Date: 2020-02-21 17:13:46
  * @LastEditors: Yuanshuo
- * @LastEditTime: 2020-02-26 22:32:47
+ * @LastEditTime: 2020-02-27 13:03:14
  -->
+
+<!-- TOC -->
+
+- [LAMMPS输入文件](#lammps输入文件)
+- [LAMMPS输出文件](#lammps输出文件)
+- [LAMMPS简单MD模拟——Fe的弛豫过程](#lammps简单md模拟fe的弛豫过程)
+- [初始模型系统设置](#初始模型系统设置)
+- [初始模型构建(读取模型数据)](#初始模型构建读取模型数据)
+- [定义原子间相互作用势](#定义原子间相互作用势)
+- [定义原子/体系某些信息的计算(ke/pe...)](#定义原子体系某些信息的计算kepe)
+- [定义输出原子(坐标)/体系(热力学信息)](#定义输出原子坐标体系热力学信息)
+- [模拟环境设定并运行](#模拟环境设定并运行)
+
+<!-- /TOC -->
+
 ### LAMMPS输入文件
 - in.file(in文件，必备)
 - data.file(模型文件，可有可无)
@@ -81,5 +96,47 @@ pair_style              meam
 pair_coeff              * * CoNiCrFeMn.meam Fe Mn
 ```
 \* \* 表示考虑任意的两个原子间的相互作用，Fe表示元素类型，CoNiCrFeMn.meam为势文件，对于含多元的势文件，如果只用到其中一部分元素，则其它的元素就不需要写出来，例如只用到Fe、Mn，则Co、Cr、Ni就不必写，而且Fe，Mn的书写顺序要与定义的原子类型序号对应。
-
-
+### 定义原子/体系某些信息的计算(ke/pe...)
+`compute`命令可以帮助计算所想得出的原子/体系信息。  
+例如：`compute 1 all pe/atom`计算每个原子的势能，`compute 2 all ke/atom`计算每个原子的动能，`compute 3 all coord/atom cutoff 3.0`计算截断半径3.0内的原子近邻数，`compute 4 allporperty/atom fx fy fz`计算每个原子在x、y、z方向上受到的力。  
+以Fe简单弛豫的动态模拟为例：  
+```
+#初始模型系统设置
+echo                    screen 
+units                   metal
+boundary                p p p
+atom_style              atomic
+#初始模型构建(读取模型数据)
+lattice                 bcc 2.8552
+region                  box block 0 10 0 10 0 10 units lattice
+create_box              1 box
+create_atoms            1 box
+#定义原子间相互作用势
+pair_style              eam/fs
+pair_coeff              * * Fe_mm.eam.fs Fe 
+#设定计算原子势能、动能及相邻原子个数
+compute                 1 all pe/atom
+compute                 2 all ke/atom
+compute                 3 all coord/atom cutoff 3.0
+compute                 4 allporperty/atom fx fy fz
+#定义输出原子(坐标)/体系(热力学信息)
+thermo_style            custom step pe ke
+thermo                  1000
+dump                    1 all custom 1000 dump.xyz id x y z c_1 c_2 c_3
+#模拟环境设定并运行
+velocity                all create 273.15 4928459 dist gaussian
+fix                     1 all nvt temp 273.15 273.15 0.5                   
+timestep                0.005
+run                     100000
+```  
+`dump 1 all custom 1000 dump.xyz id x y z c_1 c_2 c_3`  
+c为compute缩写，1为compute的id。若写为`compute x all pe/atom`则输出写为`c_x`。
+### 定义输出原子(坐标)/体系(热力学信息)
+`thermo`命令表示每运行多少步输出一次热力学信息。例如：`thermo 100`，表示每运行100步输出一次热力学信息。  
+`thermo_style`命令表示输出所需要的热力学信息。例如：`thermo_style custom step temp ke pe`，其中custom表示所需的热力学信息自定义，step表示输出运行的步数是多少，temp表示体系的温度，ke表示体系的动能，pe表示体系的势能，需要输出的热力学信息都可以写在custom后。  
+`dump`命令表示输出所需要的数据。例如：`dump 1 all custom 1000 dump.xyz id type x y z c_1 c_2 c_3`，其中all表示对于所有原子，也可只输出一部分原子的表示方式，与之前group命令相关，1000表示每运行1000步输出一次dump.xyz为输出文件名的文件，而其中的内容有，id：原子的序号，type：原子的类型，x,y,z：原子的坐标，c_1,c_2,c_3：compute计算数据。
+### 模拟环境设定并运行
+- `velocity`命令表示模拟初期给与原子初速度。例如：`velocity all create 273.15 4928459 dist gaussian`，all表示赋予所有原子，273.15为273.15K，4928459为随机正整数，dist gaussian为原子速度分布满足高斯分布。  
+- `timestep`命令表示设置模拟步长。例如：`timestep 0.005`与`units`命令有关。  
+- `fix`命令表示设置模拟系综。例如：`fix 1 all nvt temp 273.15 273.15 0.5`控制体系在温度为300K左右t的nvt环境下模拟，0.5为时间步的100倍。`fix 2 bottom setforce 0.0 0.0 0.0`设定bottom区域(region命令)的原子的受力为0(固定原子用)。  
+- `run`命令表示设置运行步数。例如：`run 100000`表示运行100000步。
