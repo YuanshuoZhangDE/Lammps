@@ -1,0 +1,42 @@
+#initialization
+echo                    screen
+units                   metal
+boundary                p p p
+atom_style              charge
+
+#simulation box definition
+read_data               Cr2O3.data
+
+#potential
+kspace_style            pppm 1.0e-4
+pair_style              hybrid/overlay coul/long 10.0 buck 10.0 buck 10.0
+pair_coeff              * * coul/long 
+pair_coeff              1 2 buck 1 2362.905 0.270628 0.0
+pair_coeff              2 2 buck 2 91.55955 0.547148 32.32
+
+#setting
+neighbor                5.0 bin
+timestep                0.001
+run                     0
+variable                E equal pe #定义变量E为系统总势能
+print "The system energy now is $E"
+
+min_style               sd
+
+thermo_style            custom step pe ke
+thermo                  100
+
+compute                 1 all pe/atom
+compute                 2 all ke/atom
+
+dump                    1 all custom 1 dump_min.lammpstrj id type x y z c_1 c_2
+minimize                1.0e-17 1.0e-17 1000000 1000000
+
+print "The system energy now is $E"
+
+velocity all create 273.15 4928459 dist gaussian
+fix                     1 all nvt temp 273.15 273.15 0.1                    
+
+dump                    2 all custom 100 dump.lammpstrj id x y z c_1 c_2
+
+run                     10000
