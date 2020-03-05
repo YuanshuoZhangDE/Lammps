@@ -1,0 +1,50 @@
+#echo                    screen 
+
+units                   metal
+boundary                p p p
+atom_style              atomic
+lattice                 bcc 2.8552
+region                  box block 0 10 0 10 0 10 units lattice
+create_box              2 box
+create_atoms            2 single 5 5 5
+create_atoms            2 single 6 6 6
+create_atoms            2 single 7 7 7
+create_atoms            2 single 4 4 4
+create_atoms            2 single 5 6 7
+create_atoms            1 box
+
+#read_data               Fe.data
+
+pair_style              meam
+pair_coeff              * * library.meam Fe Mn CoNiCrFeMn.meam Fe Mn
+run                     0
+variable                E equal pe #定义变量E为系统总势能
+variable                N equal atoms #定义变量N为系统总原子数
+
+timestep                0.001
+
+print "The number of atoms and system energy now are $N and $E"
+
+
+
+min_style               sd
+
+thermo_style            custom step pe ke
+thermo                  1000
+
+compute                 1 all pe/atom
+compute                 2 all ke/atom
+compute                 3 all coord/atom cutoff 3.0
+dump                    1 all custom 1000 dump_min.lammpstrj id x y z c_1 c_2
+
+minimize                1.0e-29 1.0e-29 1000000 1000000
+print "The number of atoms and system energy now are $N, $E"
+
+velocity all create 273.15 4928459 dist gaussian
+fix                     1 all nvt temp 273.15 273.15 0.1                    
+
+dump                    2 all custom 1000 dump.lammpstrj id x y z c_1 c_2 c_3
+
+
+
+run                     100000
