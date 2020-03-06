@@ -1,5 +1,5 @@
 #initialization
-echo                    screen
+#echo                    screen
 units                   metal
 boundary                p p p
 atom_style              charge
@@ -13,11 +13,12 @@ set                     type 3 charge -2
 
 #potential
 kspace_style            pppm 1.0e-4
-pair_style              hybrid/overlay coul/long 10.0 buck 10.0 buck 10.0 eam/cd
+pair_style              hybrid/overlay coul/long 10.0 buck 10.0 buck 10.0 eam/cd tersoff/zbl
 pair_coeff              * * coul/long 
 pair_coeff              1 3 buck 1 2362.905 0.270628 0.0
 pair_coeff              3 3 buck 2 91.55955 0.547148 32.32                          
 pair_coeff              * * eam/cd FeCr.cdeam Cr Fe NULL
+pair_coeff              * * tersoff/zbl Fe-O.tersoff.zbl NULL Fe O
 
 #setting
 neighbor                5.0 bin
