@@ -1,11 +1,15 @@
 #initialization
-echo                    screen
+#echo                    screen
 units                   metal
 boundary                p p p
 atom_style              charge
 
 #simulation box definition
 read_data               Cr2O3-Fe.data
+
+set                     type 1 charge 3
+set                     type 2 charge 0
+set                     type 3 charge -2
 
 #potential
 kspace_style            pppm 1.0e-4
@@ -31,14 +35,14 @@ thermo                  100
 compute                 pe all pe/atom
 compute                 ke all ke/atom
 
-dump                    1 all custom 100 Cr2O3-Fe_min.lammpstrj id type x y z c_pe c_ke
+dump                    1 all custom 100 dump_min.lammpstrj id type x y z c_pe c_ke
 minimize                1.0e-12 1.0e-12 1000000 1000000
-undump                  1
+
 print "The system energy now is $E"
 
-velocity all create 273.15 4928459 dist gaussian
-fix                     1 all nvt temp 273.15 273.15 0.1                    
+#velocity all create 273.15 4928459 dist gaussian
+#fix                     1 all nvt temp 273.15 273.15 0.1                    
 
-dump                    2 all custom 100 Cr2O3-Fe_run.lammpstrj id type x y z c_pe c_ke
+#dump                    2 all custom 100 dump.lammpstrj id type x y z c_pe c_ke
 
-run                     10000
+#run                     10000
