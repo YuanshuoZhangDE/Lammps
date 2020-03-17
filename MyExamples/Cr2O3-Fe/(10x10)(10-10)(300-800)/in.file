@@ -1,0 +1,146 @@
+#initialization
+#echo                    screen
+units                   metal
+boundary                p p p
+atom_style              charge
+
+#simulation box definition
+read_data              Cr2O3-Fe.data
+
+set                     type 1 charge 3
+set                     type 2 charge 0
+set                     type 3 charge -2
+
+#potential
+kspace_style            pppm 1.0e-4
+pair_style              hybrid/overlay coul/long 10.0 buck 10.0 buck 10.0 eam/cd tersoff/zbl
+pair_coeff              * * coul/long 
+pair_coeff              1 3 buck 1 2362.905 0.270628 0.0
+pair_coeff              3 3 buck 2 91.55955 0.547148 32.32                          
+pair_coeff              * * eam/cd FeCr.cdeam Cr Fe NULL
+pair_coeff              * * tersoff/zbl Fe-O.tersoff.zbl NULL Fe O
+
+#setting
+neighbor                5.0 bin
+timestep                0.001
+run                     0
+variable                E equal pe #定义变量E为系统总势能
+print "The system energy now is $E"
+
+min_style               sd
+
+thermo_style            custom step pe ke
+thermo                  100
+
+#compute                 pe all pe/atom
+#compute                 ke all ke/atom
+
+#能量最小化
+dump                    1 all custom 100 dump_min.lammpstrj id type x y z
+minimize                1.0e-12 1.0e-12 1000000 1000000
+undump			1
+
+
+#跑平衡
+dump                    2 all custom 100 dump_balance.lammpstrj id type x y z
+velocity all create 300 4928459 dist gaussian
+run                     20000
+undump                  2
+#逐步升温
+fix                     1 all nvt temp 300 300 0.1                    
+dump                    3 all custom 100 dump-300.lammpstrj id type x y z 
+
+run                     20000
+
+unfix                   1
+undump                  3
+
+#逐步升温
+fix                     2 all nvt temp 350 350 0.1                    
+dump                    4 all custom 100 dump-350.lammpstrj id type x y z 
+
+run                     20000
+
+unfix                   2
+undump                  4
+
+#逐步升温
+fix                     3 all nvt temp 400 400 0.1                    
+dump                    5 all custom 100 dump-400.lammpstrj id type x y z 
+
+run                     20000
+
+unfix                   3
+undump                  5
+
+#逐步升温
+fix                     4 all nvt temp 450 450 0.1                    
+dump                    6 all custom 100 dump-450.lammpstrj id type x y z 
+
+run                     20000
+
+unfix                   4
+undump                  6
+
+#逐步升温
+fix                     5 all nvt temp 500 500 0.1                    
+dump                    7 all custom 100 dump-500.lammpstrj id type x y z 
+
+run                     20000
+
+unfix                   5
+undump                  7
+
+#逐步升温
+fix                     6 all nvt temp 550 550 0.1                    
+dump                    8 all custom 100 dump-550.lammpstrj id type x y z 
+
+run                     20000
+
+unfix                   6
+undump                  8
+
+#逐步升温
+fix                     7 all nvt temp 600 600 0.1                    
+dump                    9 all custom 100 dump-600.lammpstrj id type x y z 
+
+run                     20000
+
+unfix                   7
+undump                  9
+
+#逐步升温
+fix                     8 all nvt temp 650 650 0.1                    
+dump                    10 all custom 100 dump-650.lammpstrj id type x y z 
+
+run                     20000
+
+unfix                   8
+undump                  10
+
+#逐步升温
+fix                     9 all nvt temp 700 700 0.1                    
+dump                    11 all custom 100 dump-700.lammpstrj id type x y z 
+
+run                     20000
+
+unfix                   9
+undump                  11
+
+#逐步升温
+fix                     10 all nvt temp 750 750 0.1                    
+dump                    12 all custom 100 dump-750.lammpstrj id type x y z 
+
+run                     20000
+
+unfix                   10
+undump                  12
+
+#逐步升温
+fix                     11 all nvt temp 800 800 0.1                    
+dump                    13 all custom 100 dump-800.lammpstrj id type x y z 
+
+run                     20000
+
+unfix                   11
+undump                  13
