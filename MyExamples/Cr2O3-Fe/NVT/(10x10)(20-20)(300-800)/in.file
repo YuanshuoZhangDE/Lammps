@@ -29,7 +29,7 @@ print "The system energy now is $E"
 
 min_style               sd
 
-thermo_style            custom step pe ke
+thermo_style            custom step temp pe ke
 thermo                  100
 
 #compute                 pe all pe/atom
@@ -41,11 +41,9 @@ minimize                1.0e-12 1.0e-12 1000000 1000000
 undump			        1
 print "The system energy now is $E"
 
-#跑平衡
-dump                    1 all custom 100 dump-balance.lammpstrj id type x y z
 velocity all create 300 4928459 dist gaussian
-run                     20000
-undump                  1
+
+dump                    0 all custom 1000 dump-300-800.lammpstrj id type x y z
 #逐步升温
 fix                     1 all nvt temp 300 300 0.1                    
 dump                    1 all custom 100 dump-300.lammpstrj id type x y z 
