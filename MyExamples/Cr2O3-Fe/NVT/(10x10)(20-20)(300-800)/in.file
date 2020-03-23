@@ -22,7 +22,7 @@ pair_coeff              * * tersoff/zbl Fe-O.tersoff.zbl NULL Fe O
 
 #setting
 neighbor                5.0 bin
-timestep                0.001
+timestep                0.001  1fs
 run                     0
 variable                E equal pe #定义变量E为系统总势能
 print "The system energy now is $E"
@@ -35,110 +35,102 @@ thermo                  100
 #compute                 pe all pe/atom
 #compute                 ke all ke/atom
 
+#输出从始到末
+dump                    0 all custom 1000 dump-start-end.lammpstrj id type x y z 
+
 #能量最小化
-dump                    1 all custom 100 dump-min.lammpstrj id type x y z
+dump                    1 all custom 1000 dump-min.lammpstrj id type x y z
 minimize                1.0e-12 1.0e-12 1000000 1000000
 undump			        1
 print "The system energy now is $E"
 
+#输出nve-nvt 
+dump                    00 all custom 1000 dump-nve-nvt.lammpstrj id type x y z 
+
+# nve 10w
 velocity all create 300 4928459 dist gaussian
+dump                    1 all custom 1000 dump-nve.lammpstrj id type x y z
+fix                     1 all nve
+run                     100000
+unfix                   1
+undump                  1
 
-dump                    0 all custom 1000 dump-300-800.lammpstrj id type x y z
-#逐步升温
+#输出nvt 300-800
+dump                    000 all custom 1000 dump-300-800.lammpstrj id type x y z
+
+#逐步升温300
+dump                    1 all custom 1000 dump-300.lammpstrj id type x y z
 fix                     1 all nvt temp 300 300 0.1                    
-dump                    1 all custom 100 dump-300.lammpstrj id type x y z 
-
-run                     20000
-
+run                     500000
 unfix                   1
 undump                  1
 
-#逐步升温
+#逐步升温350
+dump                    1 all custom 1000 dump-350.lammpstrj id type x y z
 fix                     1 all nvt temp 350 350 0.1                    
-dump                    1 all custom 100 dump-350.lammpstrj id type x y z 
-
-run                     20000
-
+run                     500000
 unfix                   1
 undump                  1
 
-#逐步升温
+#逐步升温400
+dump                    1 all custom 1000 dump-400.lammpstrj id type x y z
 fix                     1 all nvt temp 400 400 0.1                    
-dump                    1 all custom 100 dump-400.lammpstrj id type x y z 
-
-run                     20000
-
+run                     500000
 unfix                   1
 undump                  1
 
-#逐步升温
+#逐步升温450
+dump                    1 all custom 1000 dump-450.lammpstrj id type x y z
 fix                     1 all nvt temp 450 450 0.1                    
-dump                    1 all custom 100 dump-450.lammpstrj id type x y z 
-
-run                     20000
-
+run                     500000
 unfix                   1
 undump                  1
 
-#逐步升温
+#逐步升温500
+dump                    1 all custom 1000 dump-500.lammpstrj id type x y z
 fix                     1 all nvt temp 500 500 0.1                    
-dump                    1 all custom 100 dump-500.lammpstrj id type x y z 
-
-run                     20000
-
+run                     500000
 unfix                   1
 undump                  1
 
-#逐步升温
+#逐步升温550
+dump                    1 all custom 1000 dump-550.lammpstrj id type x y z
 fix                     1 all nvt temp 550 550 0.1                    
-dump                    1 all custom 100 dump-550.lammpstrj id type x y z 
-
-run                     20000
-
+run                     500000
 unfix                   1
 undump                  1
 
-#逐步升温
+#逐步升温600
+dump                    1 all custom 1000 dump-600.lammpstrj id type x y z
 fix                     1 all nvt temp 600 600 0.1                    
-dump                    1 all custom 100 dump-600.lammpstrj id type x y z 
-
-run                     20000
-
+run                     500000
 unfix                   1
 undump                  1
 
-#逐步升温
+#逐步升温650
+dump                    1 all custom 1000 dump-650.lammpstrj id type x y z
 fix                     1 all nvt temp 650 650 0.1                    
-dump                    1 all custom 100 dump-650.lammpstrj id type x y z 
-
-run                     20000
-
+run                     500000
 unfix                   1
 undump                  1
 
-#逐步升温
+#逐步升温700
+dump                    1 all custom 1000 dump-700.lammpstrj id type x y z
 fix                     1 all nvt temp 700 700 0.1                    
-dump                    1 all custom 100 dump-700.lammpstrj id type x y z 
-
-run                     20000
-
+run                     500000
 unfix                   1
 undump                  1
 
-#逐步升温
+#逐步升温750
+dump                    1 all custom 1000 dump-750.lammpstrj id type x y z
 fix                     1 all nvt temp 750 750 0.1                    
-dump                    1 all custom 100 dump-750.lammpstrj id type x y z 
-
-run                     20000
-
+run                     500000
 unfix                   1
 undump                  1
 
-#逐步升温
+#逐步升温800
+dump                    1 all custom 1000 dump-800.lammpstrj id type x y z
 fix                     1 all nvt temp 800 800 0.1                    
-dump                    1 all custom 100 dump-800.lammpstrj id type x y z 
-
-run                     20000
-
+run                     500000
 unfix                   1
 undump                  1
