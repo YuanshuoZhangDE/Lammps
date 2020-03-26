@@ -22,32 +22,36 @@ pair_coeff              * * tersoff/zbl Fe-O.tersoff.zbl NULL Fe O
 
 #setting
 neighbor                5.0 bin
-timestep                0.001 # 设置积分步长为1fs
-run                     0
-variable                E equal pe #定义变量E为系统总势能
+timestep                0.001 
+#run                     0
+#variable                E equal pe #定义变量E为系统总势能
 #print "The system energy now is $E"
 
+thermo                  1000
 min_style               sd
 
 #thermo_style            custom step temp pe ke # 观察温度、势能、动能变化
 #thermo                  100 # 每100步输出一次
 
-dump                    1 all custom 100 dump-min.lammpstrj id type x y z
 minimize                1.0e-12 1.0e-12 1000000 1000000
-undump                  1
 print "####################能量最小化结束#################"
 
 # 300K跑平衡
 velocity all create 300 4928459 dist gaussian # 根据温度初始化速度
 fix                     NVT all nvt temp 300 300 0.1                    
-dump                    2 all custom 100 dump-300.lammpstrj id type x y z
+
 run                     10000
 
+# restart
+write_restart		re-min-nvt.restart
+
+reset_timestep		0
+
 compute                 msd all msd com yes
-variable                twopoint equal C_msd[4]/4/(step*dt+0.001*10000)
-fix                     2 all vector 10 C_msd[4]
-variable                fitslope equal slope(f_2)/4/(10*dt)
+variable                twopoint equal c_msd[4]/4/(step*dt+1.0e-6)
+fix                     9 all vector 10 c_msd[4]
+variable                fitslope equal slope(f_9)/4/(10*dt)
 
-thermo_style            custom step temp c_msd[1] c_msd[2] c_msd[3] c_msd[4] v_twopoint v_fitslope
-
+thermo_style            custom step temp c_msd[4] v_twopoint v_fitslope
+thermo			1000
 run                     100000
