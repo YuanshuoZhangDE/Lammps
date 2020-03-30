@@ -1,0 +1,56 @@
+#initialization
+echo                    screen
+units                   metal
+boundary                p p p
+atom_style              charge
+
+#simulation box definition
+read_data               Cr2O3.data
+
+set                     type 1 charge 3
+set                     type 2 charge -2
+
+group                   cr type 1
+group                   o type 2
+
+#potential
+kspace_style            pppm 1.0e-4
+pair_style              hybrid/overlay coul/long 10.0 buck 10.0 buck 10.0
+pair_coeff              * * coul/long 
+pair_coeff              1 2 buck 1 2362.905 0.270628 0.0
+pair_coeff              2 2 buck 2 91.55955 0.547148 32.32
+
+#setting
+neighbor                5.0 bin
+timestep                0.001
+
+
+min_style               sd
+minimize                1.0e-12 1.0e-12 1000000 1000000
+
+velocity all create 273.15 4928459 dist gaussian
+fix                     1 all nvt temp 300 300 0.1                    
+run                     10000
+
+reset_timestep          0
+
+dump                    1 all custom 1000 dump_D.lammpstrj id type x y z
+compute                 msd_all all msd com yes
+compute                 msd_cr cr msd com yes
+compute                 msd_o o msd com yes
+
+variable                twopoint_all equal c_msd_all[4]/6/(step*dt+1.0e-6)
+variable                twopoint_cr equal c_msd_cr[4]/6/(step*dt+1.0e-6)
+variable                twopoint_o equal c_msd_o[4]/6/(step*dt+1.0e-6)
+
+fix                     9 all vector 10 c_msd_all[4]
+fix                     10 all vector 10 c_msd_cr[4]
+fix                     12 all vector 10 c_msd_o[4]
+
+variable                fitslope_all equal slope(f_9)/6/(10*dt)
+variable                fitslope_cr equal slope(f_10)/6/(10*dt)
+variable                fitslope_o equal slope(f_12)/6/(10*dt)
+
+thermo_style            custom step temp pe c_msd_all[4] c_msd_cr[4] c_msd_o[4] v_twopoint_all v_twopoint_cr v_twopoint_o v_fitslope_all v_fitslope_cr v_fitslope_o
+thermo                          1000
+run                     500000

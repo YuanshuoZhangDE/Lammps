@@ -1,0 +1,45 @@
+# Fe MSD
+
+#echo                    screen
+units                   metal
+boundary                p p p
+atom_style              charge
+
+#simulation box definition
+read_data               Fe.data
+
+#potential
+pair_style				eam/fs
+pair_coeff				* * Fe_mm.eam.fs Fe
+
+#setting
+neighbor                0.3 bin
+timestep                0.001 
+
+thermo                  1000
+min_style               sd
+
+minimize                1.0e-12 1.0e-12 1000000 1000000
+print "####################能量最小化结束#################"
+
+# 300K跑平衡
+velocity all create 300 4928459 dist gaussian # 根据温度初始化速度
+dump                    1 all custom 1000 dump.lammpstrj id x y z 
+fix                     NVT all nvt temp 300 300 0.1                    
+run                     100000
+undump                  1
+
+reset_timestep		0
+
+dump                    1 all custom 1000 dump_D.lammpstrj id x y z
+compute                 msd_all all msd com yes
+
+variable                twopoint_all equal c_msd_all[4]/6/(step*dt+1.0e-6)
+
+fix                     9 all vector 10 c_msd_all[4]
+
+variable                fitslope_all equal slope(f_9)/6/(10*dt)
+
+thermo_style            custom step temp pe c_msd_all[4] v_twopoint_all
+thermo			        1000
+run                     500000
