@@ -30,7 +30,7 @@ print "The system energy now is $E"
 min_style               sd
 
 thermo_style            custom step temp pe ke # 观察温度、势能、动能变化
-thermo                  100 # 每100步输出一次
+thermo                  1000 # 每100步输出一次
 
 dump                    1 all custom 100 dump-min.lammpstrj id type x y z
 minimize                1.0e-12 1.0e-12 1000000 1000000
@@ -72,8 +72,6 @@ variable                N equal ${M}*${Np} # 跑产出步数
 # 跑产出阶段
 run                     ${N}
 
-# 撤掉NVE HAC 系综
-unfix                    NVE
-unfix                    HAC
+
 
 #----------------------300K末------------------------------#
