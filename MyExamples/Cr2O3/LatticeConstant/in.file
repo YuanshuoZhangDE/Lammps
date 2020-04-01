@@ -1,0 +1,34 @@
+units                   metal
+boundary                p p p
+atom_style              charge
+
+variable                i loop 1000000
+
+variable                x equal 1.0+0.001*$i
+
+read_data               Cr2O3.data
+
+#potential
+kspace_style            pppm 1.0e-4
+pair_style              hybrid/overlay coul/long 10.0 buck 10.0 buck 10.0
+pair_coeff              * * coul/long 
+pair_coeff              1 2 buck 1 2362.905 0.270628 0.0
+pair_coeff              2 2 buck 2 91.55955 0.547148 32.32
+
+variable                n equal count(all)
+variable                P equal pe/$n
+
+#setting
+neighbor                5.0 bin
+timestep                0.001
+
+
+min_style               sd
+minimize                1.0e-12 1.0e-12 1000000 1000000
+
+print                   "@ $x $P"
+
+# loop
+clear
+next                    i
+jump                    in.file
