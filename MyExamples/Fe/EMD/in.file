@@ -1,26 +1,16 @@
-#initialization
-#echo                    screen
-units                   metal
-boundary                p p p
-atom_style              charge
+# Lammps in file of Fe
 
-#simulation box definition
-read_data               Cr2O3-Fe.data
+echo                        screen
+  
+units						metal
+boundary		    		p p p
+atom_style					atomic
 
-set                     type 1 charge 3
-set                     type 2 charge 0
-set                     type 3 charge -2
+read_data					Fe.data
 
-#potential
-kspace_style            pppm 1.0e-4
-pair_style              hybrid/overlay coul/long 10.0 buck 10.0 buck 10.0 eam/cd tersoff/zbl
-pair_coeff              * * coul/long 
-pair_coeff              1 3 buck 1 2362.905 0.270628 0.0
-pair_coeff              3 3 buck 2 91.55955 0.547148 32.32                          
-pair_coeff              * * eam/cd FeCr.cdeam Cr Fe NULL
-pair_coeff              * * tersoff/zbl Fe-O.tersoff.zbl NULL Fe O
+pair_style					eam/fs
+pair_coeff					* * Fe_mm.eam.fs Fe
 
-#setting
 neighbor                5.0 bin
 timestep                0.01 # 设置积分步长为10fs
 run                     0
@@ -35,16 +25,15 @@ thermo                  1000 # 每100步输出一次
 dump                    1 all custom 100 dump-min.lammpstrj id type x y z
 minimize                1.0e-12 1.0e-12 1000000 1000000
 undump                  1
-print "The system energy now is $E"
 
 velocity all create 300 4928459 dist gaussian # 根据温度初始化速度
 
 #----------------------300K始------------------------------#
 
 # 在NVT系综下平衡体系
-fix                     NVT all nvt temp 300 300 1                    
+fix                     NVT all nvt temp 300 300 0.1                    
 
-dump                    2 all custom 100 dump-300.lammpstrj id type x y z
+dump                    2 all custom 100 dump.lammpstrj id type x y z
 
 # 根据以上设置跑若干步，使系统达到热力学平衡态
 run                     100000
@@ -63,7 +52,7 @@ compute                 J all heat/flux KE PE V # 计算单原子热流
 variable                Ns equal 10 # 取样间隔
 variable                Nc equal 200 # 关联数据量(最大关联时间为Ns*Nc*DT)
 variable                Np equal ${Ns}*${Nc}*10 #产出步数
-fix                     HAC all ave/correlate ${Ns} ${Nc} ${Np} c_J[1] c_J[2] c_J[3] type auto file hac-300.txt
+fix                     HAC all ave/correlate ${Ns} ${Nc} ${Np} c_J[1] c_J[2] c_J[3] type auto file hac-Fe-300.txt
 
 variable                M equal 10 # 热流自关联函数个数
 variable                N equal ${M}*${Np} # 跑产出步数
