@@ -4,9 +4,9 @@
  * @Author: Yuanshuo_PC
  * @Date: 2020-05-12 07:57:41
  * @LastEditors: Yuanshuo_PC
- * @LastEditTime: 2020-05-12 08:47:40
+ * @LastEditTime: 2020-05-13 10:23:23
 -->
-### Ebrite
+### Crofer
 #### Mass
 Fe 55.845    
 Cr 51.996
@@ -23,5 +23,17 @@ Si 0.02%
 #### 20000 Atoms
 Fe 77.26%    15197    
 Cr 22.74%    4803.475    4803
+##### Energy Initial
+Crofer1 -79915.144763109    
+Crofer2 -79915.062827867    
+Crofer3 -79922.7310072586
+##### Energy Min
+Crofer1 -79999.5745781346    
+Crofer2 -79999.1884172949    
+Crofer3 -80006.1264763538
+##### Energy NVT(100ps)
+Crofer1 -79172.1852610728    
+Crofer2 -79153.4032714155    
+Crofer3 -79185.1310676951
 
  

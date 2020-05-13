@@ -1,0 +1,38 @@
+# Lammps in file of Fe
+
+echo                        screen
+  
+units						metal
+boundary	      			p p p
+atom_style					atomic
+
+read_data					
+
+#atom type 1 Fe
+#atom type 2 Cr
+pair_style					eam/fs 
+pair_coeff					* *  Fe
+
+
+neighbor	                0.5 bin
+
+run                     0
+variable                E equal pe #定义变量E为系统总势能
+print "The system energy now is $E"
+
+min_style                   sd
+
+dump				 		1 all custom 100 min.lammpstrj id type x y z
+minimize					1.0e-12 1.0e-12 1000000 1000000 
+
+print "The system min_energy now is $E"
+
+undump                      1
+
+velocity all create 300 4928459 dist gaussian
+
+fix                         1 all nvt temp 300 300 0.1
+dump                        1 all custom 1000 dump-nvt-300.lammpstrj id type x y z
+run                         100000
+
+print "The system nvt_energy now is $E"
