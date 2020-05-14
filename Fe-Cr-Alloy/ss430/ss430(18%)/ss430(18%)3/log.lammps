@@ -1,0 +1,187 @@
+LAMMPS (7 Aug 2019)
+# Lammps in file of Fe
+
+echo                        screen
+  orthogonal box = (0 0 0) to (28.4812 28.4812 284.812)
+  1 by 2 by 12 MPI processor grid
+  reading atoms ...
+  20000 atoms
+  read_data CPU = 0.019928 secs
+Reading potential file /share/home/yszhang/PBS/myExample/Fe-Cr-Alloy/ss430/FeCr.cdeam with DATE: 2009-11-05
+Reading potential file /share/home/yszhang/PBS/myExample/Fe-Cr-Alloy/ss430/FeCr.cdeam with DATE: 2009-11-05
+WARNING: No fixes defined, atoms won't move (../verlet.cpp:52)
+Neighbor list info ...
+  update every 1 steps, delay 10 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6
+  ghost atom cutoff = 6
+  binsize = 3, bins = 10 10 95
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/cd, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d/newton
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 3.302 | 3.306 | 3.309 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       0            0   -80525.033            0   -80525.033    24256.786 
+Loop time of 2.46366e-06 on 24 procs for 0 steps with 20000 atoms
+
+111.6% CPU use with 24 MPI tasks x no OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 2.464e-06  |            |       |100.00
+
+Nlocal:    833.333 ave 850 max 800 min
+Histogram: 8 0 0 0 0 0 0 0 0 16
+Nghost:    2620.67 ave 2662 max 2588 min
+Histogram: 8 0 0 8 0 0 0 0 0 8
+Neighs:    26666.7 ave 27695 max 25395 min
+Histogram: 2 4 0 2 0 4 4 2 2 4
+
+Total # of neighbors = 640000
+Ave neighs/atom = 32
+Neighbor list builds = 0
+Dangerous builds = 0
+The system energy now is -80525.0328398527
+WARNING: Using 'neigh_modify every 1 delay 0 check yes' setting during minimization (../min.cpp:168)
+Per MPI rank memory allocation (min/avg/max) = 5.709 | 5.713 | 5.716 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       0            0   -80525.033            0   -80525.033    24256.786 
+    3776            0     -80599.2            0     -80599.2    27418.439 
+Loop time of 20.3541 on 24 procs for 3776 steps with 20000 atoms
+
+98.7% CPU use with 24 MPI tasks x no OpenMP threads
+
+Minimization stats:
+  Stopping criterion = energy tolerance
+  Energy initial, next-to-last, final = 
+        -80525.0328399     -80599.2001479      -80599.200148
+  Force two-norm initial, final = 33.8832 0.00160801
+  Force max component initial, final = 0.60414 0.000543868
+  Final line search alpha, max atom move = 1 0.000543868
+  Iterations, force evaluations = 3776 7552
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 18.132     | 18.694     | 19.266     |   7.9 | 91.84
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.56106    | 0.98469    | 1.6182     |  33.3 |  4.84
+Output  | 0.057417   | 0.068082   | 0.078865   |   2.5 |  0.33
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 0.6074     |            |       |  2.98
+
+Nlocal:    833.333 ave 850 max 800 min
+Histogram: 8 0 0 0 0 0 0 0 0 16
+Nghost:    2620.67 ave 2662 max 2588 min
+Histogram: 8 0 0 8 0 0 0 0 0 8
+Neighs:    26666.7 ave 27695 max 25395 min
+Histogram: 2 4 0 2 0 4 4 2 2 4
+
+Total # of neighbors = 640000
+Ave neighs/atom = 32
+Neighbor list builds = 0
+Dangerous builds = 0
+The system min_energy now is -80599.2001479653
+Per MPI rank memory allocation (min/avg/max) = 3.302 | 3.306 | 3.309 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+    3776          300     -80599.2            0   -79823.678    31003.851 
+  103776    300.12202   -79772.039            0   -78996.201    28896.252 
+Loop time of 267.193 on 24 procs for 100000 steps with 20000 atoms
+
+Performance: 32.336 ns/day, 0.742 hours/ns, 374.262 timesteps/s
+98.8% CPU use with 24 MPI tasks x no OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 235.8      | 242.24     | 248.29     |  18.5 | 90.66
+Neigh   | 4.5478     | 4.6947     | 4.9813     |   4.1 |  1.76
+Comm    | 8.2108     | 13.033     | 18.579     |  79.3 |  4.88
+Output  | 0.16725    | 0.19638    | 0.22611    |   4.0 |  0.07
+Modify  | 4.6585     | 6.2733     | 8.1934     |  52.7 |  2.35
+Other   |            | 0.7558     |            |       |  0.28
+
+Nlocal:    833.333 ave 858 max 811 min
+Histogram: 2 2 7 1 1 2 3 2 1 3
+Nghost:    2621.46 ave 2651 max 2580 min
+Histogram: 4 2 2 0 0 0 4 2 5 5
+Neighs:    26806.4 ave 28068 max 25597 min
+Histogram: 2 2 1 1 9 2 3 0 2 2
+
+Total # of neighbors = 643353
+Ave neighs/atom = 32.1677
+Neighbor list builds = 3878
+Dangerous builds = 0
+The system nvt_300_energy now is -79772.0388918817
+Per MPI rank memory allocation (min/avg/max) = 3.302 | 3.306 | 3.309 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+  103776    300.12202   -79772.039            0   -78996.201    28896.252 
+  203776    398.80456   -79485.869            0   -78454.929    30163.145 
+Loop time of 260.495 on 24 procs for 100000 steps with 20000 atoms
+
+Performance: 33.168 ns/day, 0.724 hours/ns, 383.885 timesteps/s
+98.6% CPU use with 24 MPI tasks x no OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 227.97     | 233.19     | 238.71     |  19.3 | 89.52
+Neigh   | 4.9542     | 5.1229     | 5.415      |   4.2 |  1.97
+Comm    | 9.5583     | 14.328     | 19         |  75.7 |  5.50
+Output  | 0.015991   | 0.019093   | 0.022361   |   1.4 |  0.01
+Modify  | 5.1271     | 7.121      | 9.5669     |  54.9 |  2.73
+Other   |            | 0.7101     |            |       |  0.27
+
+Nlocal:    833.333 ave 857 max 813 min
+Histogram: 2 3 5 2 3 1 2 1 2 3
+Nghost:    2620.67 ave 2649 max 2580 min
+Histogram: 3 3 2 0 0 0 2 4 6 4
+Neighs:    26946.2 ave 28162 max 25995 min
+Histogram: 2 2 4 5 3 2 1 2 1 2
+
+Total # of neighbors = 646709
+Ave neighs/atom = 32.3355
+Neighbor list builds = 4213
+Dangerous builds = 0
+The system nvt_400_energy now is -79485.8685496118
+Per MPI rank memory allocation (min/avg/max) = 3.302 | 3.306 | 3.309 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+  203776    398.80456   -79485.869            0   -78454.929    30163.145 
+  303776    496.42503   -79203.269            0   -77919.974    31787.577 
+Loop time of 265.757 on 24 procs for 100000 steps with 20000 atoms
+
+Performance: 32.511 ns/day, 0.738 hours/ns, 376.284 timesteps/s
+98.5% CPU use with 24 MPI tasks x no OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 223.15     | 234.72     | 245.66     |  38.8 | 88.32
+Neigh   | 5.7287     | 5.9128     | 6.2463     |   4.5 |  2.22
+Comm    | 8.1369     | 16.484     | 26.409     | 142.9 |  6.20
+Output  | 0.016058   | 0.019169   | 0.022429   |   1.4 |  0.01
+Modify  | 3.6633     | 7.9148     | 17.438     | 141.6 |  2.98
+Other   |            | 0.7061     |            |       |  0.27
+
+Nlocal:    833.333 ave 857 max 809 min
+Histogram: 2 3 2 5 0 2 2 2 4 2
+Nghost:    2618.96 ave 2663 max 2569 min
+Histogram: 1 5 2 0 0 2 6 4 3 1
+Neighs:    27107.9 ave 28306 max 25824 min
+Histogram: 1 0 4 3 2 7 2 1 1 3
+
+Total # of neighbors = 650589
+Ave neighs/atom = 32.5294
+Neighbor list builds = 4809
+Dangerous builds = 0
+The system nvt_500_energy now is -79203.2694168262
+Total wall time: 0:13:34

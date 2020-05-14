@@ -4,7 +4,7 @@
  * @Author: Yuanshuo_PC
  * @Date: 2020-05-12 07:57:41
  * @LastEditors: Yuanshuo_PC
- * @LastEditTime: 2020-05-13 10:23:23
+ * @LastEditTime: 2020-05-14 15:28:03
 -->
 ### Crofer
 #### Mass
@@ -31,9 +31,17 @@ Crofer3 -79922.7310072586
 Crofer1 -79999.5745781346    
 Crofer2 -79999.1884172949    
 Crofer3 -80006.1264763538
-##### Energy NVT(100ps)
+##### Energy NVT-300K(100ps)
 Crofer1 -79172.1852610728    
 Crofer2 -79153.4032714155    
 Crofer3 -79185.1310676951
+##### Energy NVT-400K(100ps)
+Crofer1 -78880.2254890767    
+Crofer2 -78872.899171823    
+Crofer3 -78878.6898950602
+##### Energy NVT-500K(100ps)
+Crofer1 -78585.546945409    
+Crofer2 -78577.5206848759    
+Crofer3 -78579.0802605494
 
  
