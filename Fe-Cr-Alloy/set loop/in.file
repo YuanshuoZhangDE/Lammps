@@ -1,0 +1,33 @@
+units               metal
+atom_style          atomic
+boundary            p p p
+neighbor            0.3 bin
+
+read_data           Fe.data
+
+variable            i loop 700000
+
+set                 type 1 type/fraction 2 0.18 $i 
+
+pair_style          eam/cd
+pair_coeff          * *  Fe Cr
+
+run                 0
+
+variable            E equal pe
+
+print               "@ini $i $E"
+
+dump				1 all custom 100 Fe.data.$i id type x y z
+
+min_style           sd
+minimize            1.0e-12 1.0e-12 1000000 1000000
+
+print               "@min $i $E"
+
+#loop
+clear
+next                1
+jump                in.file
+
+
