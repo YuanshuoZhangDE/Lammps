@@ -1,0 +1,27 @@
+units						metal
+boundary	      			p p p
+atom_style					atomic
+
+read_data				/share/home/yszhang/PBS/myExample/Fe-Cr-Alloy/NEB/step1-min/FeCr.data	
+
+#atom type 1 Fe
+#atom type 2 Cr
+pair_style					eam/cd 
+pair_coeff					* * /share/home/yszhang/lammps/lammps-install/potentials/FeCr.cdeam Fe Cr
+
+
+neighbor	                0.3 bin
+
+run                     0
+variable                E equal pe #定义变量E为系统总势能
+print "The system energy now is $E"
+
+min_style                   sd
+
+dump				 		1 all custom 100 min.lammpstrj id type x y z
+minimize					1.0e-12 1.0e-12 1000000 1000000 
+
+print "The system min_energy now is $E"
+
+undump                      1
+

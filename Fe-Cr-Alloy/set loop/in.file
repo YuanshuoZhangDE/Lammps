@@ -6,8 +6,9 @@ neighbor            0.3 bin
 read_data           Fe.data
 
 variable            i loop 700000
+variable            N equal $i
 
-set                 type 1 type/fraction 2 0.18 $i 
+set                 type 1 type/fraction 2 0.18 $N
 
 pair_style          eam/cd
 pair_coeff          * *  Fe Cr
