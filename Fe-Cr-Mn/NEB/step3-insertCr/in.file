@@ -1,0 +1,17 @@
+units               metal
+atom_style          atomic
+boundary            p p p
+neighbor            0.5 bin
+
+read_data	    /share/home/yszhang/PBS/myExample/Fe-Cr-Mn/insertMn/superCrFeMn.data
+
+pair_style          meam
+pair_coeff          * * /share/home/yszhang/lammps/lammps-install/potentials/CoNiCrFeMn/library.meam Cr Fe Mn  /share/home/yszhang/lammps/lammps-install/potentials/CoNiCrFeMn/CoNiCrFeMn.meam Cr Fe Mn
+
+dump		    1 all custom 10 min.data id type x y z
+
+minimize            1.0e-12 1.0e-12 1000000 1000000
+
+undump		    1
+
+

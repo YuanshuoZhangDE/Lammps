@@ -1,0 +1,39 @@
+#initialization
+echo                    screen
+units                   metal
+atom_style		atomic
+atom_modify		map array
+boundary                p p p
+atom_modify		sort 0 0.0
+
+
+#simulation box definition
+read_data              /share/home/yszhang/PBS/myExample/Fe-Cr-Alloy/NEB/neb/FeCr.data
+
+group                   nebatoms id 8135 
+
+#potential                        
+pair_style          meam
+pair_coeff          * * /share/home/yszhang/lammps/lammps-install/potentials/CoNiCrFeMn/library.meam Cr Fe Mn  /share/home/yszhang/lammps/lammps-install/potentials/CoNiCrFeMn/CoNiCrFeMn.meam Cr Fe Mn
+
+#setting
+neighbor                0.5 bin
+timestep                0.001
+
+variable 		u uloop 20
+
+dump			1 nebatoms custom 100 dump.neb.$u id type x y z
+
+minimize                1.0e-12 1.0e-12 1000000 1000000
+reset_timestep      	0
+
+fix 			1 nebatoms neb 1.0
+
+thermo			100
+
+timestep                0.01
+
+min_style               quickmin
+
+neb                     0.0 0.01 100000 100000 100 final /share/home/yszhang/PBS/myExample/Fe-Cr-Alloy/NEB/neb/final.file 
+
