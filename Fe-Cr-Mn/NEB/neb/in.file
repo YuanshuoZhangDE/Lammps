@@ -1,4 +1,5 @@
 #initialization
+# 8143 ---> 8135
 echo                    screen
 units                   metal
 atom_style		atomic
@@ -10,7 +11,7 @@ atom_modify		sort 0 0.0
 #simulation box definition
 read_data              /share/home/yszhang/PBS/myExample/Fe-Cr-Alloy/NEB/neb/FeCr.data
 
-group                   nebatoms id 8135 
+group                   nebatoms id 8143 
 
 #potential                        
 pair_style          meam
