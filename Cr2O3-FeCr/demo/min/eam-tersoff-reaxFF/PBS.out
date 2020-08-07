@@ -1,0 +1,325 @@
+LAMMPS (3 Mar 2020)
+units                   metal
+boundary                p p p
+atom_style              charge
+
+#simulation box definition
+read_data              /share/home/yszhang/PBS/myExample/Cr2O3-FeCr/demo/min/Cr2O3-FeCr.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (22.6439 22.6439 120.773)
+  2 by 2 by 8 MPI processor grid
+  reading atoms ...
+  5660 atoms
+  read_data CPU = 0.013341 secs
+
+#potential
+kspace_style            pppm 1.0e-4
+pair_style              hybrid/overlay coul/long 10.0 buck 10.0 buck 10.0 eam/alloy tersoff/zbl reax/c NULL
+pair_coeff              * * coul/long
+pair_coeff              1 3 buck 1 2362.905 0.270628 0.0
+pair_coeff              3 3 buck 2 91.55955 0.547148 32.32
+pair_coeff              * * eam/alloy /share/home/yszhang/lammps/lammps-install/potentials/FeCr_d.eam.alloy Cr Fe NULL Cr
+pair_coeff              * * tersoff/zbl /share/home/yszhang/lammps/lammps-install/potentials/Fe-O.tersoff.zbl NULL Fe O NULL
+Reading potential file /share/home/yszhang/lammps/lammps-install/potentials/Fe-O.tersoff.zbl with DATE: 2018-05-16
+pair_coeff              * * reax/c /share/home/yszhang/lammps/lammps-install/potentials/CrOFeSCH.reax Cr Fe O Cr
+WARNING: Changed valency_val to valency_boc for X (../reaxc_ffield.cpp:315)
+
+#setting
+neighbor                5.0 bin
+timestep                0.001
+#run                     0
+#variable                E equal pe #定义变量E为系统总势能
+#print "The system energy now is $E"
+
+min_style               sd
+
+thermo_style            custom step temp pe ke
+thermo                  10
+
+#compute                 pe all pe/atom
+#compute                 ke all ke/atom
+
+fix             	1 all qeq/reax 1 0.0 10.0 1.0e-6 reax/c
+
+dump                    1 all custom 10000 dump_min.lammpstrj id type x y z
+minimize                1.0e-12 1.0e-12 1000000 1000000
+WARNING: Using 'neigh_modify every 1 delay 0 check yes' setting during minimization (../min.cpp:190)
+PPPM initialization ...
+WARNING: System is not charge neutral, net charge = -75 (../kspace.cpp:313)
+  using 12-bit tables for long-range coulomb (../kspace.cpp:332)
+  G vector (1/distance) = 0.303825
+  grid = 24 24 75
+  stencil order = 5
+  estimated absolute RMS force accuracy = 0.00124696
+  estimated relative force accuracy = 8.65964e-05
+  using double precision FFTW3
+  3d grid and FFT values/proc = 9522 1728
+Neighbor list info ...
+  update every 1 steps, delay 0 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 15
+  ghost atom cutoff = 15
+  binsize = 7.5, bins = 4 4 17
+  8 neighbor lists, perpetual/occasional/extra = 8 0 0
+  (1) pair coul/long, perpetual, half/full from (8)
+      attributes: half, newton on
+      pair build: halffull/newton
+      stencil: none
+      bin: none
+  (2) pair buck, perpetual, skip from (1)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (3) pair buck, perpetual, skip from (1)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (4) pair eam/alloy, perpetual, skip from (1)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (5) pair tersoff/zbl, perpetual, skip from (8)
+      attributes: full, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (6) pair reax/c, perpetual
+      attributes: half, newton off, ghost
+      pair build: half/bin/newtoff/ghost
+      stencil: half/ghost/bin/3d/newtoff
+      bin: standard
+  (7) fix qeq/reax, perpetual, copy from (6)
+      attributes: half, newton off, ghost
+      pair build: copy
+      stencil: none
+      bin: none
+  (8) neighbor class addition, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Setting up sd style minimization ...
+  Unit style    : metal
+  Current step  : 0
+Per MPI rank memory allocation (min/avg/max) = 171.3 | 180.1 | 185.5 Mbytes
+Step Temp PotEng KinEng 
+       0            0    -532436.6            0 
+      10            0   -618527.66            0 
+      20            0   -642659.82            0 
+      30            0   -645203.83            0 
+      40            0   -646007.12            0 
+      50            0   -646581.42            0 
+      60            0   -647110.02            0 
+      70            0    -647648.6            0 
+      80            0   -648195.46            0 
+      90            0   -648626.92            0 
+     100            0   -649038.29            0 
+     110            0   -649518.04            0 
+     120            0   -650012.83            0 
+     130            0   -650602.03            0 
+     140            0   -651240.66            0 
+     150            0   -651956.11            0 
+     160            0   -652783.68            0 
+     170            0    -653489.5            0 
+     180            0   -654330.41            0 
+     190            0   -655096.89            0 
+     200            0   -655847.88            0 
+     210            0   -656661.85            0 
+     220            0   -657452.21            0 
+     230            0   -658269.45            0 
+     240            0   -659068.94            0 
+     250            0   -659861.71            0 
+     260            0      -660694            0 
+     270            0   -661550.82            0 
+     280            0    -662399.1            0 
+     290            0   -663252.74            0 
+     300            0   -664119.95            0 
+     310            0   -664971.67            0 
+     320            0   -665777.99            0 
+     330            0   -666651.25            0 
+     340            0   -667530.38            0 
+     350            0   -668323.57            0 
+     360            0   -669264.87            0 
+     370            0      -670005            0 
+     380            0    -670771.9            0 
+     390            0   -671619.39            0 
+     400            0   -672397.63            0 
+     410            0   -673088.45            0 
+     420            0   -673730.72            0 
+     430            0   -674303.22            0 
+     440            0   -674834.21            0 
+     450            0   -675325.68            0 
+     460            0   -675805.86            0 
+     470            0   -676230.62            0 
+     480            0   -676628.95            0 
+     490            0   -676976.28            0 
+     500            0   -677321.59            0 
+     510            0   -677647.49            0 
+     520            0   -677986.46            0 
+     530            0   -678313.05            0 
+     540            0   -678645.82            0 
+     550            0   -678976.04            0 
+     560            0   -679310.11            0 
+     570            0    -679634.4            0 
+     580            0   -679946.58            0 
+     590            0   -680240.99            0 
+     600            0   -680519.99            0 
+     610            0   -680784.92            0 
+     620            0   -681033.21            0 
+     630            0   -681268.83            0 
+     640            0   -681490.82            0 
+     650            0   -681698.27            0 
+     660            0   -681889.87            0 
+     670            0   -682078.18            0 
+     680            0   -682245.45            0 
+     690            0   -682533.61            0 
+     700            0    -682865.9            0 
+     710            0   -683105.63            0 
+     720            0   -683237.23            0 
+     730            0   -683398.88            0 
+     740            0   -683618.48            0 
+     750            0   -683738.77            0 
+     760            0    -683880.2            0 
+     770            0   -684177.31            0 
+     780            0   -684363.73            0 
+     790            0   -684626.02            0 
+     800            0   -684944.09            0 
+     810            0   -685071.27            0 
+     820            0   -685295.19            0 
+     830            0   -685350.24            0 
+     840            0   -685490.06            0 
+     850            0   -685666.01            0 
+     860            0   -685846.18            0 
+     870            0   -685925.73            0 
+     880            0   -686077.44            0 
+     890            0   -686303.56            0 
+     900            0   -686454.81            0 
+     910            0   -686654.72            0 
+     920            0    -686801.4            0 
+     930            0   -686925.36            0 
+     940            0   -687019.26            0 
+     950            0   -687158.48            0 
+     960            0   -687327.96            0 
+     970            0   -687525.53            0 
+     980            0   -687591.86            0 
+     990            0   -687708.39            0 
+    1000            0   -687887.79            0 
+    1010            0   -688016.18            0 
+    1020            0   -688168.78            0 
+    1030            0   -688310.08            0 
+    1040            0   -688437.08            0 
+    1050            0   -688491.77            0 
+    1060            0   -688623.76            0 
+    1070            0    -688731.5            0 
+    1080            0   -688883.19            0 
+    1090            0   -689007.68            0 
+    1100            0   -689115.57            0 
+    1110            0   -689154.35            0 
+    1120            0   -689195.59            0 
+    1130            0   -689238.45            0 
+    1140            0   -689281.21            0 
+    1150            0   -689323.05            0 
+    1160            0   -689364.22            0 
+    1170            0   -689404.07            0 
+    1180            0   -689443.58            0 
+    1190            0   -689482.21            0 
+    1200            0   -689520.04            0 
+    1210            0   -689557.56            0 
+    1220            0   -689595.55            0 
+    1230            0   -689634.45            0 
+    1240            0    -689671.3            0 
+    1250            0   -689707.86            0 
+    1260            0   -689749.59            0 
+    1270            0   -689793.39            0 
+    1280            0    -689837.9            0 
+    1290            0   -689882.78            0 
+    1300            0   -689927.29            0 
+    1310            0   -690062.09            0 
+    1320            0   -690111.05            0 
+    1330            0   -690210.99            0 
+    1340            0    -690304.6            0 
+    1350            0   -690366.01            0 
+    1360            0   -690452.23            0 
+    1370            0   -690539.88            0 
+    1380            0   -690592.25            0 
+    1390            0   -690614.03            0 
+    1400            0   -690679.19            0 
+    1410            0   -690708.77            0 
+    1420            0    -690796.5            0 
+    1430            0   -690874.14            0 
+    1440            0   -690938.76            0 
+    1450            0   -690946.46            0 
+    1460            0    -691005.6            0 
+    1470            0   -691073.12            0 
+    1480            0   -691167.25            0 
+    1490            0   -691259.32            0 
+    1500            0    -691316.8            0 
+    1510            0   -691412.26            0 
+    1520            0   -691465.89            0 
+    1530            0   -691514.01            0 
+    1540            0   -691528.95            0 
+    1550            0   -691578.32            0 
+    1560            0   -691668.01            0 
+    1570            0   -691696.88            0 
+    1580            0   -691757.35            0 
+    1590            0   -691801.31            0 
+    1600            0   -691852.72            0 
+    1610            0   -691888.33            0 
+    1620            0   -691900.53            0 
+    1630            0   -691930.69            0 
+    1640            0    -691945.3            0 
+    1650            0   -691956.92            0 
+    1660            0   -692017.16            0 
+    1670            0   -692017.66            0 
+    1676            0   -692017.65            0 
+Loop time of 1056.24 on 32 procs for 1676 steps with 5660 atoms
+
+97.7% CPU use with 32 MPI tasks x no OpenMP threads
+
+Minimization stats:
+  Stopping criterion = energy tolerance
+  Energy initial, next-to-last, final = 
+        -532436.595249     -692017.655622     -692017.650265
+  Force two-norm initial, final = 10346.7 160.909
+  Force max component initial, final = 376.871 42.9829
+  Final line search alpha, max atom move = 0.000290811 0.0124999
+  Iterations, force evaluations = 1676 6784
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 751.54     | 856.09     | 961.35     | 192.0 | 81.05
+Kspace  | 9.8856     | 115.16     | 219.71     | 523.5 | 10.90
+Neigh   | 0.12281    | 0.13567    | 0.15534    |   2.8 |  0.01
+Comm    | 1.2789     | 1.3484     | 1.403      |   3.1 |  0.13
+Output  | 0.0044165  | 0.0054882  | 0.03498    |   7.2 |  0.00
+Modify  | 83.181     | 83.23      | 83.268     |   0.3 |  7.88
+Other   |            | 0.2815     |            |       |  0.03
+
+Nlocal:    176.875 ave 199 max 154 min
+Histogram: 4 2 3 0 5 6 4 1 3 4
+Nghost:    6805.19 ave 7392 max 6311 min
+Histogram: 4 0 8 1 7 4 0 4 0 4
+Neighs:    114839 ave 135384 max 89551 min
+Histogram: 1 5 2 2 5 2 2 5 4 4
+FullNghs:  103510 ave 128824 max 77901 min
+Histogram: 3 2 4 3 4 3 5 2 2 4
+
+Total # of neighbors = 3873484
+Ave neighs/atom = 684.361
+Neighbor list builds = 2
+Dangerous builds = 0
+undump			1
+#print "The system energy now is $E"
+
+#dump                    2 all custom 100 dump.lammpstrj id type x y z
+#velocity all create 273.15 4928459 dist gaussian
+#fix                     2 all nvt temp 273.15 273.15 0.1
+#run                     10000000
+
+Please see the log.cite file for references relevant to this simulation
+
+Total wall time: 0:17:36
