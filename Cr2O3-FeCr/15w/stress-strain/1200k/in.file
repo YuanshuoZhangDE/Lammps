@@ -1,0 +1,98 @@
+#initialization
+#echo                    screen
+units                   metal
+boundary                p p p
+atom_style              charge
+
+#simulation box definition
+# 需修改文件路径
+read_data              /share/home/yszhang/PBS/myExample/Cr2O3-FeCr/15w/stress_strain/1200k/Cr2O3-FeCr.data
+
+group                   cr3 type 1
+group                   fe type 2
+group                   o type 3
+group                   cr type 4
+
+#potential
+kspace_style            pppm 1.0e-4
+pair_style              hybrid/overlay coul/long 10.0 buck 10.0 buck 10.0 buck 10.0 eam/alloy tersoff/zbl
+pair_coeff              * * coul/long
+pair_coeff              1 3 buck 1 2362.905 0.270628 0.0
+pair_coeff              3 3 buck 2 91.55955 0.547148 32.32
+pair_coeff              1 4 buck 3 2362.905 0.270628 0.0
+pair_coeff              * * eam/alloy /share/home/yszhang/lammps/lammps-install/potentials/FeCr_d.eam.alloy Cr Fe NULL Cr
+pair_coeff              * * tersoff/zbl /share/home/yszhang/lammps/lammps-install/potentials/Fe-O.tersoff.zbl NULL Fe O NULL
+
+#setting
+neighbor                5.0 bin
+timestep                0.001
+
+dump                    1 all custom 10000 relax.lammpstrj id type q x y z
+
+# 需修改
+velocity all create 1200 4928459 mom yes rot yes dist gaussian
+
+minimize            1.0e-12 1.0e-12 1000000 1000000
+
+# 1500K relaxed sufficiently to obtain an equilibrium state
+reset_timestep      0
+# 需修改
+fix                 2 all npt temp 1200 1200 1 iso 0 0 1 drag 1
+run                 100000
+unfix               2
+undump			    1
+
+# uniaxially compressed
+reset_timestep      0
+variable            ll equal "lz"
+variable            L0 equal ${ll}
+variable            srate equal 3.0e9
+variable            srate1 equal "-v_srate/1.0e12"
+
+################### 应力应变 ##################
+# 需修改
+fix                 3 all npt temp 1200 1200 1 x 0 0 1 y 0 0 1 drag 1
+fix                 4 all deform 1 z erate ${srate1} units box remap x
+## 1Gpa = 10000bar
+variable            pstress equal "pzz/10000"
+variable            pstrain equal "(v_L0-lz)/v_L0"
+dump                2 all custom 1000 comp.lammpstrj id type q x y z
+dump_modify         2 sort id 
+
+################### MSD ##################
+compute             msd_cr3 cr3 msd com yes
+compute             msd_fe fe msd com yes
+compute             msd_o o msd com yes
+compute             msd_cr cr msd com yes
+
+variable            msd_cr3 equal c_msd_cr3[4]
+variable            msd_fe equal c_msd_fe[4]
+variable            msd_o equal c_msd_o[4]
+variable            msd_cr equal c_msd_cr[4]
+
+variable            twopoint_cr3 equal c_msd_cr3[4]/6/(step*dt+1.0e-6)
+variable            twopoint_fe equal c_msd_fe[4]/6/(step*dt+1.0e-6)
+variable            twopoint_o equal c_msd_o[4]/6/(step*dt+1.0e-6)
+variable            twopoint_cr equal c_msd_cr[4]/6/(step*dt+1.0e-6)
+
+fix                     7 all vector 10 c_msd_cr3[4]
+fix                     8 all vector 10 c_msd_fe[4]
+fix                     9 all vector 10 c_msd_o[4]
+fix                     10 all vector 10 c_msd_cr[4]
+
+variable                fitslope_cr3 equal slope(f_7)/6/(10*dt)
+variable                fitslope_fe equal slope(f_8)/6/(10*dt)
+variable                fitslope_o equal slope(f_9)/6/(10*dt)
+variable                fitslope_cr equal slope(f_10)/6/(10*dt)
+
+fix                 5 all print 100 "${pstress} ${pstrain}" file stress_strain.txt
+fix                 6 all print 100 "${msd_cr3} ${msd_fe} ${msd_o} ${msd_cr}" file msd.txt
+fix                 11 all print 100 "${twopoint_cr3} ${twopoint_fe} ${twopoint_o} ${twopoint_cr}" file twopoint.txt
+fix                 12 all print 100 "${fitslope_cr3} ${fitslope_fe} ${fitslope_o} ${fitslope_cr}" file fitslope.txt
+
+run                 100000
+
+unfix               3
+unfix               4
+unfix               5
+undump              2
